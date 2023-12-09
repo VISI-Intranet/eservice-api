@@ -1,0 +1,14 @@
+[debug] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-http-core_2.13/10.2.10/akka-http-core_2.13-10.2.10-sources.jar
+[debug] downloaded https://repo1.maven.org/maven2/org/json4s/json4s-core_2.13/4.0.3/json4s-core_2.13-4.0.3-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/typesafe/ssl-config-core_2.13/0.4.2/ssl-config-core_2.13-0.4.2-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/org/mongodb/mongodb-driver-core/4.4.0/mongodb-driver-core-4.4.0-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/io/projectreactor/reactor-core/3.2.22.RELEASE/reactor-core-3.2.22.RELEASE-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.12.4/jackson-databind-2.12.4-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/org/json4s/json4s-core_2.13/4.0.3/json4s-core_2.13-4.0.3-sources.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.12.4/jackson-databind-2.12.4-sources.jar
+[debug] downloaded https://repo1.maven.org/maven2/org/json4s/json4s-jackson-core_2.13/4.0.3/json4s-jackson-core_2.13-4.0.3-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-http-core_2.13/10.2.10/akka-http-core_2.13-10.2.10-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-http_2.13/10.2.10/akka-http_2.13-10.2.10-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-stream_2.13/2.6.16/akka-stream_2.13-2.6.16-javadoc.jar
+[debug] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_2.13/2.6.16/akka-actor_2.13-2.6.16-javadoc.jar
