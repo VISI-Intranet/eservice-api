@@ -5,7 +5,8 @@ case class EServices (
                        service: String,
                        title: String,
                        text: String,
-                       price: Double
+                       price: Double,
+                       statusUslugi:String
                    )
 case class Users (
                  id: Int,
