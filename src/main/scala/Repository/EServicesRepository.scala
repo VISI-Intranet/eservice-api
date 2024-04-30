@@ -18,7 +18,8 @@ class EServicesRepository(implicit ec: ExecutionContext) {
           service = doc.getString("service"),
           title = doc.getString("title"),
           text = doc.getString("text"),
-          price = doc.getDouble("price")
+          price = doc.getDouble("price"),
+          statusUslugi = doc.getString("statusUslugi")
         )
       }.toList).getOrElse(List.empty)
     }
@@ -35,7 +36,8 @@ class EServicesRepository(implicit ec: ExecutionContext) {
             service = doc.getString("service"),
             title = doc.getString("title"),
             text = doc.getString("text"),
-            price = doc.getDouble("price")
+            price = doc.getDouble("price"),
+            statusUslugi = doc.getString("statusUslugi")
           )
         )
       case None => None
@@ -48,7 +50,8 @@ class EServicesRepository(implicit ec: ExecutionContext) {
       "service" -> BsonString(eService.service),
       "title" -> BsonString(eService.title),
       "text" -> BsonString(eService.text),
-      "price" -> BsonDouble(eService.price)
+      "price" -> BsonDouble(eService.price),
+      "statusUslugi" -> BsonString(eService.statusUslugi)
     )
 
     Mongodbcollection.eServicesCollection.insertOne(eServiceDocument).toFuture().map(_ => s"Услуга ${eService.title} добавлена в базу данных.")
@@ -68,7 +71,8 @@ class EServicesRepository(implicit ec: ExecutionContext) {
         "service" -> BsonString(updatedEService.service),
         "title" -> BsonString(updatedEService.title),
         "text" -> BsonString(updatedEService.text),
-        "price" -> BsonDouble(updatedEService.price)
+        "price" -> BsonDouble(updatedEService.price),
+        "statusUslugi"-> BsonString(updatedEService.statusUslugi)
       )
     )
 

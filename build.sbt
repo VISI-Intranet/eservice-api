@@ -13,5 +13,7 @@ lazy val root = (project in file("."))
       "org.json4s" %% "json4s-native" % "4.0.3",
       "org.json4s" %% "json4s-jackson" % "4.0.3",
       "com.typesafe.akka" %% "akka-actor" % "2.6.16",
+      "com.rabbitmq" % "amqp-client" % "5.16.0",
+
     )
   )
