@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/srsEservice.iml" filepath="$PROJECT_DIR$/.idea/modules/srsEservice.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/srsEservice-build.iml" filepath="$PROJECT_DIR$/.idea/modules/srsEservice-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/srsEservice.srsEservice-build.iml" filepath="$PROJECT_DIR$/.idea/modules/srsEservice.srsEservice-build.iml" />
     </modules>
   </component>
 </project>

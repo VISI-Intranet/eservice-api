@@ -1,7 +1,7 @@
 package Model
 
 case class EServices (
-                       id: Int,
+                       _id:Option[String] = None,
                        service: String,
                        title: String,
                        text: String,

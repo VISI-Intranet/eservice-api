@@ -14,6 +14,9 @@ import com.typesafe.config.ConfigFactory
 object Main extends App {
   val serviceConfig = ConfigFactory.load("service_app.conf")
   val serviceName = serviceConfig.getString("service.serviceName")
+  val exchangeName = serviceConfig.getString("service.exchangeName")
+  val port = serviceConfig.getString("service.port")
+
 
   implicit val system: ActorSystem = ActorSystem(serviceName)
   implicit val materializer: ActorMaterializer = ActorMaterializer()
@@ -27,7 +30,7 @@ object Main extends App {
 
   val eServicesRoutes = new EServicesRoutes()
 
-  val amqpActor = system.actorOf(Props(new AmqpActor("X:routing.topic2",serviceName)),"amqpActor")
+  val amqpActor = system.actorOf(Props(new AmqpActor(exchangeName,serviceName)),"amqpActor")
   amqpActor ! RabbitMQ.DeclareListener(
     queue = "eservice_api_queue",
     bind_routing_key = "univer.eservice_api.#",
@@ -37,9 +40,9 @@ object Main extends App {
 
 
   // Старт сервера
-  private val bindingFuture = Http().bindAndHandle(eServicesRoutes.route, "localhost", 8080)
+  private val bindingFuture = Http().newServerAt("localhost", port.toInt).bind(eServicesRoutes.route)
 
-  println(s"Server online at http://localhost:8080/")
+  println(s"Server online at http://localhost:$port/")
 
   // Остановка сервера при завершении приложения
   sys.addShutdownHook {

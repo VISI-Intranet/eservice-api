@@ -14,7 +14,7 @@ class EServicesRepository(implicit ec: ExecutionContext) {
     futureEServices.map { docs =>
       Option(docs).map(_.map { doc =>
         EServices(
-          id = doc.getInteger("id"),
+          Some(doc.getObjectId("_id").toHexString),
           service = doc.getString("service"),
           title = doc.getString("title"),
           text = doc.getString("text"),
@@ -32,7 +32,7 @@ class EServicesRepository(implicit ec: ExecutionContext) {
       case Some(doc) =>
         Some(
           EServices(
-            id = doc.getInteger("id"),
+            Some(doc.getObjectId("_id").toHexString),
             service = doc.getString("service"),
             title = doc.getString("title"),
             text = doc.getString("text"),
@@ -46,7 +46,6 @@ class EServicesRepository(implicit ec: ExecutionContext) {
 
   def addEService(eService: EServices): Future[String] = {
     val eServiceDocument = BsonDocument(
-      "id" -> BsonInt32(eService.id),
       "service" -> BsonString(eService.service),
       "title" -> BsonString(eService.title),
       "text" -> BsonString(eService.text),
@@ -54,7 +53,12 @@ class EServicesRepository(implicit ec: ExecutionContext) {
       "statusUslugi" -> BsonString(eService.statusUslugi)
     )
 
-    Mongodbcollection.eServicesCollection.insertOne(eServiceDocument).toFuture().map(_ => s"Услуга ${eService.title} добавлена в базу данных.")
+    Mongodbcollection.eServicesCollection.insertOne(eServiceDocument).toFuture().map(result =>
+      {
+        val insertedId = result.getInsertedId.asObjectId().getValue
+        s"Услуга по айди ${insertedId} добавлена в базу данных."
+      }
+    )
   }
 
   def deleteEServiceById(id: Int): Future[String] = {
@@ -67,7 +71,6 @@ class EServicesRepository(implicit ec: ExecutionContext) {
 
     val eServiceDocument = BsonDocument(
       "$set" -> BsonDocument(
-        "id" -> BsonInt32(updatedEService.id),
         "service" -> BsonString(updatedEService.service),
         "title" -> BsonString(updatedEService.title),
         "text" -> BsonString(updatedEService.text),
@@ -79,7 +82,8 @@ class EServicesRepository(implicit ec: ExecutionContext) {
     Mongodbcollection.eServicesCollection.updateOne(filter, eServiceDocument).toFuture().map { updatedResult =>
       if (updatedResult.wasAcknowledged() && updatedResult.getModifiedCount > 0) {
         s"Информация об услуге с ID $id успешно обновлена."
-      } else {
+      }
+      else {
         s"Обновление информации об услуге с ID $id не выполнено. Возможно, услуга не найдена или произошла ошибка в базе данных."
       }
     }
