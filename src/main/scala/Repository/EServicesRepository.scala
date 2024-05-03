@@ -1,7 +1,8 @@
 package Repository
 
 import org.mongodb.scala.Document
-import org.mongodb.scala.bson.{BsonDocument, BsonDouble, BsonInt32, BsonString}
+import org.mongodb.scala.bson.{BsonDocument, BsonDouble, BsonInt32, BsonString, ObjectId}
+
 import scala.concurrent.{ExecutionContext, Future}
 import Connection._
 import Model._
@@ -27,6 +28,26 @@ class EServicesRepository(implicit ec: ExecutionContext) {
 
   def getEServiceById(id: Int): Future[Option[EServices]] = {
     val serviceDocument = Document("id" -> id)
+
+    Mongodbcollection.eServicesCollection.find(serviceDocument).headOption().map {
+      case Some(doc) =>
+        Some(
+          EServices(
+            Some(doc.getObjectId("_id").toHexString),
+            service = doc.getString("service"),
+            title = doc.getString("title"),
+            text = doc.getString("text"),
+            price = doc.getDouble("price"),
+            statusUslugi = doc.getString("statusUslugi")
+          )
+        )
+      case None => None
+    }
+  }
+
+  def getEServiceByObjId(id: String): Future[Option[EServices]] = {
+    val objectId = new ObjectId(id)
+    val serviceDocument = Document("_id" -> objectId)
 
     Mongodbcollection.eServicesCollection.find(serviceDocument).headOption().map {
       case Some(doc) =>

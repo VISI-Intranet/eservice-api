@@ -1,21 +1,27 @@
 package Route
 
+import Connection.Mongodbcollection
 import Model.EServices
 import Repository.EServicesRepository
 
 import scala.util.{Failure, Random, Success}
 import akka.actor.ActorSystem
 import akka.pattern.ask
+
 import akka.util.Timeout
 import amqp._
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport
 import org.json4s.jackson.JsonMethods
 import org.json4s.{DefaultFormats, Formats, jackson}
+import org.mongodb.scala.bson.{BsonDocument, BsonDouble, BsonString}
+import reactor.core.publisher.Signal.complete
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 import scala.util.matching.Regex
+import io.circe.syntax._
+import io.circe.generic.auto._
 
 class Rabbit_Consumer(implicit val system:ActorSystem) extends Json4sSupport{
   implicit val ex:ExecutionContext = system.dispatcher
@@ -25,9 +31,45 @@ class Rabbit_Consumer(implicit val system:ActorSystem) extends Json4sSupport{
   implicit val eServicesRepository = new EServicesRepository()
 
 
+
   val amqpActor = system.actorSelection("user/amqpActor")
   def handle(message:Message):Unit={
     message.routingKey match {
+
+      case "univer.eservice-api.getStudyCertificatStudent" =>
+
+        val e = new EServicesRepository()
+        val result = e.getEServiceByObjId(message.body)
+
+
+        result.onComplete {
+          case Success(res) =>
+            val jsonString: String = res.map(_.asJson.noSpaces).getOrElse("")
+            println(jsonString)
+            amqpActor ! RabbitMQ.Answer(message.replyTo,message.correlationId,jsonString)
+
+        }
+
+
+      case "univer.eservice-api.createStudyCertificate" =>
+
+        val eServiceDocument = BsonDocument(
+          "service" -> BsonString("StudyCertificate"),
+          "title" -> BsonString("Справка с место учебы"),
+          "text" -> BsonString(s"Данная справка подтверждает что студент ${message.body} обучаеться в Казну"),
+          "price" -> BsonDouble(0),
+          "statusUslugi" -> BsonString("Забирайте")
+        )
+        var insertedId = ""
+
+        Mongodbcollection.eServicesCollection.insertOne(eServiceDocument).toFuture().map(result => {
+          insertedId = result.getInsertedId.asObjectId().getValue.toString
+          println(s"Услуга по айди ${insertedId} добавлена в базу данных.")
+          amqpActor ! RabbitMQ.Tell(s"univer.student-api.eserviceCreatedOption" , s"Ваша справка с место учебы уже готово по id ${insertedId}!!!")
+        })
+
+
+
 
 
       case "univer.eservice_api.CheckRoomForStudent"=>{

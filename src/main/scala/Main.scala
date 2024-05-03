@@ -32,8 +32,8 @@ object Main extends App {
 
   val amqpActor = system.actorOf(Props(new AmqpActor(exchangeName,serviceName)),"amqpActor")
   amqpActor ! RabbitMQ.DeclareListener(
-    queue = "eservice_api_queue",
-    bind_routing_key = "univer.eservice_api.#",
+    queue = "Eservice",
+    bind_routing_key = "univer.eservice-api.#",
     actorName = "consumerActor_1",
     handle = new Rabbit_Consumer().handle)
 
