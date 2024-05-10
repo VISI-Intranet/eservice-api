@@ -23,7 +23,7 @@ object Main extends App {
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
   // Подключение к базе данных
-  val client = MongoClient()
+  private val client = MongoClient("mongodb://mongodb:27017")
   implicit val db = client.getDatabase("UniverService")
 
   implicit val eServicesRepository = new EServicesRepository()
@@ -40,9 +40,10 @@ object Main extends App {
 
 
   // Старт сервера
-  private val bindingFuture = Http().newServerAt("localhost", port.toInt).bind(eServicesRoutes.route)
+//  private val bindingFuture = Http().newServerAt("localhost", port.toInt).bind(eServicesRoutes.route)
+private val bindingFuture = Http().newServerAt("0.0.0.0", port.toInt).bind(eServicesRoutes.route)
 
-  println(s"Server online at http://localhost:$port/")
+  println(s"Server online at http://localhost:$port/ - docker creation")
 
   // Остановка сервера при завершении приложения
   sys.addShutdownHook {

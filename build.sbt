@@ -21,3 +21,9 @@ lazy val root = (project in file("."))
 
     )
   )
+
+
+assemblyMergeStrategy in assembly := {
+  case "module-info.class" => MergeStrategy.discard
+  case x => (assemblyMergeStrategy in assembly).value(x)
+}
